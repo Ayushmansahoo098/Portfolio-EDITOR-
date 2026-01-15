@@ -1,0 +1,852 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editor Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --bg-primary: #000000;
+      --accent-orange: #FF8C00;
+      --accent-purple: #7B3FE4;
+      --text-primary: #FFFFFF;
+      --text-secondary: #9CA3AF;
+      --text-muted: #6B7280;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
+    
+    .font-display {
+      font-family: 'Bebas Neue', sans-serif;
+    }
+    
+    .gradient-text {
+      background: linear-gradient(90deg, #FF8C00, #7B3FE4, #FF8C00);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% center; }
+      50% { background-position: 200% center; }
+    }
+    
+    .reveal {
+      opacity: 0;
+      transform: translateY(60px);
+      transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .timeline-line {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(180deg, #FF8C00, #7B3FE4);
+    }
+    
+    .timeline-dot {
+      position: absolute;
+      left: -6px;
+      top: 0;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #FF8C00;
+      box-shadow: 0 0 20px rgba(255, 140, 0, 0.5);
+    }
+    
+    .work-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.4s ease;
+    }
+    
+    .work-card:hover {
+      border-color: rgba(255, 140, 0, 0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+    
+    .work-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #FF8C00, #7B3FE4);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    
+    .work-card:hover::before {
+      opacity: 1;
+    }
+    
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 24px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    .contact-link:hover {
+      background: rgba(255, 140, 0, 0.05);
+      border-color: rgba(255, 140, 0, 0.3);
+      transform: translateX(8px);
+    }
+    
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(ellipse at 20% 80%, rgba(123, 63, 228, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(255, 140, 0, 0.06) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    
+    .nav-link {
+      position: relative;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.3s ease;
+    }
+    
+    .nav-link:hover {
+      color: var(--text-primary);
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent-orange);
+      transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover::after {
+      width: 100%;
+    }
+    
+    .video-container {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      background: #111;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    
+    .scroll-indicator {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(10px); }
+    }
+    
+    .section-divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, #FF8C00, #7B3FE4);
+      margin: 0 auto 32px;
+    }
+    
+    .tool-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    .tool-icon:nth-child(1) { animation-delay: 0s; }
+    .tool-icon:nth-child(2) { animation-delay: 0.2s; }
+    .tool-icon:nth-child(3) { animation-delay: 0.4s; }
+    .tool-icon:nth-child(4) { animation-delay: 0.6s; }
+    .tool-icon:nth-child(5) { animation-delay: 0.8s; }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+    }
+    
+    .tool-icon:hover {
+      transform: translateY(-8px) rotate(5deg) scale(1.05);
+      border-color: rgba(255, 140, 0, 0.4);
+      background: rgba(255, 140, 0, 0.05);
+      box-shadow: 0 20px 40px rgba(255, 140, 0, 0.2);
+    }
+    
+    .tool-icon svg {
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+      transition: all 0.4s ease;
+    }
+    
+    .tool-icon:hover svg {
+      filter: drop-shadow(0 8px 16px rgba(255, 140, 0, 0.4));
+      transform: scale(1.1);
+    }
+    
+    .fade-out-tools {
+      animation: fadeOutTools 0.8s ease-out forwards;
+    }
+    
+    .fade-in-tools {
+      animation: fadeInTools 0.8s ease-in forwards;
+    }
+    
+    @keyframes fadeOutTools {
+      from {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+    }
+    section {
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+section.fade-out {
+  opacity: 0;
+  transform: translateY(-30px);
+  pointer-events: none;
+}
+    @keyframes fadeInTools {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div class="app-wrapper w-full h-full overflow-auto">
+   <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-6 md:px-12">
+    <div class="max-w-7xl mx-auto flex justify-between items-center"><a href="#hero" class="font-display text-2xl tracking-wider gradient-text">Ayushman</a>
+     <div class="hidden md:flex items-center gap-8"><a href="#about" class="nav-link">About</a> <a href="#experience" class="nav-link">Experience</a> <a href="#work" class="nav-link">Work</a> <a href="#tools" class="nav-link">Tools</a> <a href="#contact" class="nav-link">Contact</a>
+     </div>
+    </div>
+   </nav>
+   <section id="hero" class="relative min-h-screen flex items-center justify-center px-6">
+    <div class="hero-bg"></div>
+    <div class="text-center z-10 max-w-5xl mx-auto">
+     <h1 id="hero-headline" class="font-display text-5xl md:text-7xl lg:text-8xl tracking-wider leading-none mb-6 gradient-text">TURNING FOOTAGE INTO STORIES</h1>
+     <p id="hero-subtext" class="text-lg md:text-xl text-gray-400 font-light tracking-wide max-w-2xl mx-auto">Cinematic Editor &amp; Visual Storyteller</p>
+    </div>
+    <div class="scroll-indicator"><span>Scroll</span>
+     <svg width="24" height="24" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12l7 7 7-7" />
+     </svg>
+    </div>
+   </section>
+   <section id="about" class="py-20 md:py-28 px-6">
+  <div class="max-w-6xl mx-auto">
+
+    <div class="text-center mb-16 reveal">
+      <h2 id="about-title" class="font-display text-4xl md:text-5xl tracking-wider mb-4">
+        ABOUT ME
+      </h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
+
+      <!-- IMAGE -->
+      <div class="lg:col-span-2 reveal flex justify-center">
+        <img
+          src="https://i.ibb.co/nsy1QkyG/ayushman.jpg"
+          alt="Ayushman Sahoo"
+          class="rounded-lg shadow-2xl w-full max-w-xs sm:max-w-sm md:max-w-md object-cover"
+        >
+      </div>
+
+      <!-- CONTENT -->
+      <div class="lg:col-span-3 space-y-8 reveal text-center lg:text-left">
+
+        <h3 class="text-2xl sm:text-3xl md:text-5xl font-display tracking-wider">
+          Ayushman Sahoo :
+          <span class="text-orange-400">Editor & Motion Designer</span>
+        </h3>
+
+        <!-- STATS -->
+        <div class="flex flex-col sm:flex-row gap-8 sm:gap-12 justify-center lg:justify-start">
+
+          <div>
+            <p class="text-4xl font-display text-orange-400 counter" data-target="1.5">1.5</p>
+            <p class="text-xs uppercase tracking-widest text-gray-500">Years Experience</p>
+          </div>
+
+          <div>
+            <p class="text-4xl font-display text-orange-400 counter" data-target="300+">300+</p>
+            <p class="text-xs uppercase tracking-widest text-gray-500">Videos Delivered</p>
+          </div>
+
+          <div>
+            <p class="text-4xl font-display text-orange-400">INTERMERDIATE</p>
+            <p class="text-xs uppercase tracking-widest text-gray-500">Skill Level</p>
+          </div>
+
+        </div>
+
+        <!-- BIO -->
+        <p id="about-text-1"
+           class="text-base sm:text-lg leading-relaxed text-gray-300 max-w-2xl mx-auto lg:mx-0">
+          Over the past 1.5 years, I’ve edited 300+ videos across ad films, college productions,
+          and creator content. From leading edits as a senior college editor to delivering
+          agency-grade commercials, my focus is rhythm, emotion, and cinematic flow.
+        </p>
+
+      </div>
+    </div>
+  </div>
+</section>
+   <section id="experience" class="py-24 md:py-32 px-6">
+    <div class="max-w-5xl mx-auto">
+     <div class="text-center mb-20 reveal">
+      <h2 id="experience-title" class="font-display text-4xl md:text-5xl tracking-wider mb-4">THE JOURNEY</h2>
+      <div class="section-divider"></div>
+     </div>
+     <div class="relative pl-8 md:pl-12">
+      <div class="timeline-line"></div>
+      <div class="relative pb-16 reveal">
+       <div class="timeline-dot"></div>
+       <div class="pl-8"><span class="text-sm text-orange-400 tracking-wider">2025 — PRESENT</span>
+        <h3 class="font-display text-2xl md:text-3xl mt-2 mb-3">Video Editor at <span class="text-purple-400">Ad Film Agency</span></h3>
+        <p class="text-gray-400 leading-relaxed max-w-2xl mb-3">Working on commercial and branded content with a strong focus on storytelling, pacing, and visual impact for digital and advertising platforms.</p>
+        <ul class="text-gray-400 leading-relaxed max-w-2xl space-y-2">
+         <li class="flex items-start gap-2"><span class="text-orange-400 mt-1">•</span> <span>Edited ad films, brand promos, and social media commercials for multiple clients</span></li>
+         <li class="flex items-start gap-2"><span class="text-orange-400 mt-1">•</span> <span>Executed high-energy cuts, beat-synced transitions, and cinematic sequences</span></li>
+         <li class="flex items-start gap-2"><span class="text-orange-400 mt-1">•</span> <span>Provided 350+ pieces of content across various campaigns</span></li>
+         <li class="flex items-start gap-2"><span class="text-orange-400 mt-1">•</span> <span>Delivered agency-standard outputs under tight timelines and client revisions</span></li>
+        </ul>
+       </div>
+      </div>
+      <div class="relative pb-16 reveal">
+       <div class="timeline-dot" style="background: #7B3FE4; box-shadow: 0 0 20px rgba(123, 63, 228, 0.5);"></div>
+       <div class="pl-8"><span class="text-sm text-purple-400 tracking-wider">2024 — PRESENT</span>
+        <h3 class="font-display text-2xl md:text-3xl mt-2 mb-3">Junior Editor at <span class="text-orange-400">Personal Studio</span></h3>
+        <p class="text-gray-400 leading-relaxed max-w-2xl mb-3">Building strong technical and creative foundations through hands-on editing across multiple formats and genres.</p>
+        <ul class="text-gray-400 leading-relaxed max-w-2xl space-y-2">
+         <li class="flex items-start gap-2"><span class="text-purple-400 mt-1">•</span> <span>Assisted in editing client projects including reels, promos, and event videos</span></li>
+         <li class="flex items-start gap-2"><span class="text-purple-400 mt-1">•</span> <span>Developed skills in timeline organization, basic motion graphics, and transitions</span></li>
+         <li class="flex items-start gap-2"><span class="text-purple-400 mt-1">•</span> <span>Learned professional workflows, client feedback handling, and delivery standards</span></li>
+         <li class="flex items-start gap-2"><span class="text-purple-400 mt-1">•</span> <span>Contributed to maintaining studio quality and turnaround efficiency</span></li>
+        </ul>
+       </div>
+      </div>
+      <div class="relative reveal">
+       <div class="timeline-dot"></div>
+       <div class="pl-8"><span class="text-sm text-orange-400 tracking-wider">2023 — 2024</span>
+        <h3 class="font-display text-2xl md:text-3xl mt-2 mb-3">Senior Video Editor at <span class="text-purple-400">College Media Team</span></h3>
+        <p class="text-gray-400 leading-relaxed max-w-2xl mb-3">Leading video production and post-production for official college events, promotions, and digital presence.</p>
+        <ul class="text-gray-400 leading-relaxed max-w-2xl space-y-2">
+         <li class="flex items-start gap-2"><span class="text-orange-400 mt-1">•</span> <span>Head editor for college event films, recaps, and promotional videos</span></li>
+         <li class="flex items-start gap-2"><span class="text-orange-400 mt-1">•</span> <span>Mentored junior editors and ensured consistency in visual style and quality</span></li>
+        </ul>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section>
+   <section id="work" class="py-24 md:py-32 px-6 bg-gradient-to-b from-transparent via-zinc-950/50 to-transparent">
+    <div class="max-w-6xl mx-auto">
+     <div class="text-center mb-20 reveal">
+      <h2 class="font-display text-4xl md:text-5xl tracking-wider mb-4">SELECTED WORK</h2>
+      <div class="section-divider"></div>
+      <p class="text-gray-400 max-w-xl mx-auto">A curated collection of projects showcasing cinematic storytelling across brands, music, and film.</p>
+     </div>
+     <div class="grid md:grid-cols-2 gap-8">
+      <div class="work-card reveal">
+       <div class="p-6 pb-0"><span class="text-xs text-orange-400 tracking-widest uppercase">SHOWREEL</span>
+        <h3 class="font-display text-xl md:text-2xl mt-2 mb-4">Skills showcase</h3>
+       </div>
+       <div class="p-6">
+        <div class="video-container"><iframe src="https://www.youtube.com/embed/UMZe85QStIA" title="Skills showcase" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen> </iframe>
+        </div>
+       </div>
+      </div>
+      <div class="work-card reveal">
+       <div class="p-6 pb-0"><span class="text-xs text-purple-400 tracking-widest uppercase">MOTION GRAPHICS</span>
+        <h3 class="font-display text-xl md:text-2xl mt-2 mb-4">Bringing audio to life</h3>
+       </div>
+       <div class="p-6">
+        <div class="video-container"><iframe src="https://www.youtube.com/embed/kGM-ahvL7AE" title="Behind The Craft" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen> </iframe>
+        </div>
+       </div>
+      </div>
+      <div class="work-card reveal">
+       <div class="p-6 pb-0"><span class="text-xs text-orange-400 tracking-widest uppercase">VIDEO EDIT</span>
+        <h3 class="font-display text-xl md:text-2xl mt-2 mb-4">video cuts to story</h3>
+       </div>
+       <div class="p-6">
+        <div class="video-container"><iframe src="https://www.youtube.com/embed/ZgURUzEmB6A" title="Artist Visual Story" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen> </iframe>
+        </div>
+       </div>
+      </div>
+      <div class="work-card reveal">
+       <div class="p-6 pb-0"><span class="text-xs text-purple-400 tracking-widest uppercase">MOOD EDIT</span>
+        <h3 class="font-display text-xl md:text-2xl mt-2 mb-4">Vibe edit</h3>
+       </div>
+       <div class="p-6">
+        <div class="video-container"><iframe src="https://www.youtube.com/embed/L2xje44MjMs" title="Lifestyle Brand Spot" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen> </iframe>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section>
+   <section id="tools" class="py-24 md:py-32 px-6">
+    <div class="max-w-5xl mx-auto">
+     <div class="text-center mb-20 reveal">
+      <h2 class="font-display text-4xl md:text-5xl tracking-wider mb-4">TOOLS I USE</h2>
+      <div class="section-divider"></div>
+      <p class="text-gray-400 max-w-2xl mx-auto">Professional software that brings creative visions to life</p>
+     </div>
+     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+      <div class="tool-icon reveal">
+       <div class="lg:col-span-2 reveal flex justify-center">
+        <img
+          src="https://i.ibb.co/G3BrsXdk/Premier-pro.png"
+          alt="Ayushman Sahoo"
+          class="rounded-lg shadow-2xl w-full max-w-xs sm:max-w-sm md:max-w-md object-cover"
+        >
+      </div>
+         <lineargradient id="prGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#00005B" />
+          <stop offset="100%" style="stop-color:#1a0052" />
+         </lineargradient>
+        </defs> <rect width="240" height="234" rx="8" fill="url(#prGrad)" /> <path d="M76.5 65.5c-5 0-9 4-9 9v85c0 5 4 9 9 9h87c5 0 9-4 9-9v-85c0-5-4-9-9-9h-87z" fill="#00005B" opacity="0.6" /> <path d="M86 90h24c10 0 18 8 18 18v2c0 10-8 18-18 18h-10v22h-14V90zm14 28h9c3 0 5-2 5-5v-2c0-3-2-5-5-5h-9v12zm48-18v12h8v12h-8v12h8v12h12v-12h4v-12h-4v-26h4v-12h-4V88h-12v12h-8z" fill="#9999FF" />
+       </svg>
+       <p class="text-center mt-4 font-medium text-gray-300">Premiere Pro</p>
+      </div>
+      <div class="tool-icon reveal">
+       <div class="lg:col-span-2 reveal flex justify-center">
+        <img
+          src="https://i.ibb.co/VcGGFJyV/after-effects.png"
+          alt="Ayushman Sahoo"
+          class="rounded-lg shadow-2xl w-full max-w-xs sm:max-w-sm md:max-w-md object-cover"
+        >
+      </div>
+         <lineargradient id="aeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#00005B" />
+          <stop offset="100%" style="stop-color:#1a0052" />
+         </lineargradient>
+        </defs> <rect width="240" height="234" rx="8" fill="url(#aeGrad)" /> <path d="M76.5 65.5c-5 0-9 4-9 9v85c0 5 4 9 9 9h87c5 0 9-4 9-9v-85c0-5-4-9-9-9h-87z" fill="#00005B" opacity="0.6" /> <path d="M95 90l-22 60h13l4-12h22l4 12h13l-22-60h-12zm-1 38l7-20 7 20h-14zm58-28v10h14v14h-14v10h14v14h10v-14h10v-10h-10v-14h10v-10h-10V90h-10v10h-14z" fill="#9999FF" />
+       </svg>
+       <p class="text-center mt-4 font-medium text-gray-300">After Effects</p>
+      </div>
+      <div class="tool-icon reveal">
+       <div class="lg:col-span-2 reveal flex justify-center">
+        <img
+          src="https://i.ibb.co/twH6tYdS/photoshop.png"
+          alt="Ayushman Sahoo"
+          class="rounded-lg shadow-2xl w-full max-w-xs sm:max-w-sm md:max-w-md object-cover"
+        >
+      </div>
+       <p class="text-center mt-4 font-medium text-gray-300">Photoshop</p>
+      </div>
+      <div class="tool-icon reveal">
+       <div class="lg:col-span-2 reveal flex justify-center">
+        <img
+          src="https://i.ibb.co/C3D16Lhd/illustrator.png"
+          alt="Ayushman Sahoo"
+          class="rounded-lg shadow-2xl w-full max-w-xs sm:max-w-sm md:max-w-md object-cover"
+        >
+      </div>
+         <lineargradient id="aiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#330000" />
+          <stop offset="100%" style="stop-color:#4a0000" />
+         </lineargradient>
+        </defs> <rect width="240" height="234" rx="8" fill="url(#aiGrad)" /> <path d="M76.5 65.5c-5 0-9 4-9 9v85c0 5 4 9 9 9h87c5 0 9-4 9-9v-85c0-5-4-9-9-9h-87z" fill="#310000" opacity="0.7" /> <path d="M96 90l-20 60h12l4-11h20l4 11h12l-20-60h-12zm-2 40l6-18 6 18h-12zm50-30v10h-10v10h10v30h12v-30h10v-10h-10V90h-12z" fill="#FF9A00" />
+       </svg>
+       <p class="text-center mt-4 font-medium text-gray-300">Illustrator</p>
+      </div>
+      <div class="tool-icon reveal">
+      <div class="lg:col-span-2 reveal flex justify-center">
+        <img
+          src="https://i.ibb.co/Tx2tHTNz/capcut.png"
+          alt="Ayushman Sahoo"
+          class="rounded-lg shadow-2xl w-full max-w-xs sm:max-w-sm md:max-w-md object-cover"
+        >
+      </div>
+       <p class="text-center mt-4 font-medium text-gray-300">CapCut</p>
+      </div>
+     </div>
+    </div>
+   </section>
+   <section id="contact" class="py-24 md:py-32 px-6">
+    <div class="max-w-3xl mx-auto">
+     <div class="text-center mb-16 reveal">
+      <h2 id="contact-title" class="font-display text-4xl md:text-5xl tracking-wider mb-4 gradient-text">LET'S CREATE</h2>
+      <div class="section-divider"></div>
+      <p class="text-gray-400 max-w-lg mx-auto">Ready to bring your vision to life? Let's discuss your next project.</p>
+     </div>
+     <div class="space-y-4 reveal"><a id="contact-email-link" href="mailto:ayushmansahoo098@gmail.com" class="contact-link">
+       <div class="w-12 h-12 rounded-full bg-orange-500/10 flex items-center justify-center flex-shrink-0">
+        <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+       </div>
+       <div>
+        <div class="text-sm text-gray-500 mb-1">
+         Email
+        </div>
+        <div id="contact-email-text" class="text-lg">
+         ayushmansahoo098@gmail.com
+        </div>
+       </div></a> <a id="contact-phone-link" href="tel:+917077731427" class="contact-link">
+       <div class="w-12 h-12 rounded-full bg-purple-500/10 flex items-center justify-center flex-shrink-0">
+        <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+        </svg>
+       </div>
+       <div>
+        <div class="text-sm text-gray-500 mb-1">
+         Phone
+        </div>
+        <div id="contact-phone-text" class="text-lg">
+         +91 7077731427
+        </div>
+       </div></a> <a id="contact-instagram-link" href="https://www.instagram.com/ayushman_098/" target="_blank" rel="noopener noreferrer" class="contact-link">
+       <div class="w-12 h-12 rounded-full bg-orange-500/10 flex items-center justify-center flex-shrink-0">
+        <svg class="w-5 h-5 text-orange-400" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+        </svg>
+       </div>
+       <div>
+        <div class="text-sm text-gray-500 mb-1">
+         Instagram
+        </div>
+        <div id="contact-instagram-text" class="text-lg">
+         @ayushman_098
+        </div>
+       </div></a>
+     </div>
+    </div>
+   </section>
+   <footer class="text-center py-6 text-gray-400 text-sm">
+  <p class="font-medium text-gray-300">
+    © 2026 All Rights Reserved.
+  </p>
+  <p class="mt-1 text-xs tracking-wide">
+    made with <span class="text-red-500">♥</span> by Ayushman
+  </p>
+</footer>
+
+  </div>
+  <script>
+    const defaultConfig = {
+      hero_headline: 'TURNING FOOTAGE INTO STORIES',
+      hero_subtext: 'Cinematic Editor & Visual Storyteller',
+      about_title: 'ABOUT ME',
+      about_text_1: "I'm a cinematic editor passionate about transforming raw footage into compelling visual stories. With over 1.5 years of experience in the industry, i've worked with ad-film agencies and senior editors .",
+      about_text_2: "My approach combines technical precision with artistic vision. Every cut, every transition, and every frame is carefully crafted to evoke emotion and drive narrative forward.",
+      about_text_3: "Whether it's a high-energy commercial, an intimate documentary, or a music video that pushes creative boundaries—I bring dedication, creativity, and a deep love for the craft to every project.",
+      experience_title: 'THE JOURNEY',
+      contact_title: "LET'S CREATE",
+      contact_email: 'ayushmansahoo098@gmail.com',
+      contact_phone: '+91 7077731427',
+      contact_instagram: '@ayushman_098',
+      background_color: '#000000',
+      accent_color: '#FF8C00',
+      secondary_accent: '#7B3FE4',
+      text_color: '#FFFFFF',
+      text_secondary: '#9CA3AF',
+      font_family: 'Inter',
+      font_size: 16
+    };
+
+    function initScrollReveal() {
+      const reveals = document.querySelectorAll('.reveal');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              entry.target.classList.add('active');
+            }, index * 100);
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      });
+      
+      reveals.forEach(reveal => observer.observe(reveal));
+    }
+
+    function initToolsFadeEffect() {
+      const toolsSection = document.getElementById('tools');
+      let hasSeenTools = false;
+      
+      const toolsObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            toolsSection.classList.remove('fade-out-tools');
+            toolsSection.classList.add('fade-in-tools');
+            hasSeenTools = true;
+          } else if (hasSeenTools && entry.boundingClientRect.top > 0) {
+            toolsSection.classList.remove('fade-in-tools');
+            toolsSection.classList.add('fade-out-tools');
+          }
+        });
+      }, {
+        threshold: 0.3,
+        rootMargin: '0px'
+      });
+      
+      if (toolsSection) {
+        toolsObserver.observe(toolsSection);
+      }
+    }
+
+    async function onConfigChange(config) {
+      const heroHeadline = document.getElementById('hero-headline');
+      if (heroHeadline) {
+        heroHeadline.textContent = config.hero_headline || defaultConfig.hero_headline;
+      }
+      
+      const heroSubtext = document.getElementById('hero-subtext');
+      if (heroSubtext) {
+        heroSubtext.textContent = config.hero_subtext || defaultConfig.hero_subtext;
+      }
+      
+      const aboutTitle = document.getElementById('about-title');
+      if (aboutTitle) {
+        aboutTitle.textContent = config.about_title || defaultConfig.about_title;
+      }
+      
+      const aboutText1 = document.getElementById('about-text-1');
+      if (aboutText1) {
+        aboutText1.textContent = config.about_text_1 || defaultConfig.about_text_1;
+      }
+      
+      const aboutText2 = document.getElementById('about-text-2');
+      if (aboutText2) {
+        aboutText2.textContent = config.about_text_2 || defaultConfig.about_text_2;
+      }
+      
+      const aboutText3 = document.getElementById('about-text-3');
+      if (aboutText3) {
+        aboutText3.textContent = config.about_text_3 || defaultConfig.about_text_3;
+      }
+      
+      const experienceTitle = document.getElementById('experience-title');
+      if (experienceTitle) {
+        experienceTitle.textContent = config.experience_title || defaultConfig.experience_title;
+      }
+      
+      const contactTitle = document.getElementById('contact-title');
+      if (contactTitle) {
+        contactTitle.textContent = config.contact_title || defaultConfig.contact_title;
+      }
+      
+      const email = config.contact_email || defaultConfig.contact_email;
+      const emailLink = document.getElementById('contact-email-link');
+      const emailText = document.getElementById('contact-email-text');
+      if (emailLink) emailLink.href = `mailto:${email}`;
+      if (emailText) emailText.textContent = email;
+      
+      const phone = config.contact_phone || defaultConfig.contact_phone;
+      const phoneLink = document.getElementById('contact-phone-link');
+      const phoneText = document.getElementById('contact-phone-text');
+      if (phoneLink) phoneLink.href = `tel:${phone.replace(/[^+\d]/g, '')}`;
+      if (phoneText) phoneText.textContent = phone;
+      
+      const instagram = config.contact_instagram || defaultConfig.contact_instagram;
+      const instagramLink = document.getElementById('contact-instagram-link');
+      const instagramText = document.getElementById('contact-instagram-text');
+      const handle = instagram.startsWith('@') ? instagram.slice(1) : instagram;
+      if (instagramLink) instagramLink.href = `https://instagram.com/${handle}`;
+      if (instagramText) instagramText.textContent = instagram.startsWith('@') ? instagram : `@${instagram}`;
+      
+      const bgColor = config.background_color || defaultConfig.background_color;
+      const accentColor = config.accent_color || defaultConfig.accent_color;
+      const secondaryAccent = config.secondary_accent || defaultConfig.secondary_accent;
+      const textColor = config.text_color || defaultConfig.text_color;
+      const textSecondary = config.text_secondary || defaultConfig.text_secondary;
+      
+      document.documentElement.style.setProperty('--bg-primary', bgColor);
+      document.documentElement.style.setProperty('--accent-orange', accentColor);
+      document.documentElement.style.setProperty('--accent-purple', secondaryAccent);
+      document.documentElement.style.setProperty('--text-primary', textColor);
+      document.documentElement.style.setProperty('--text-secondary', textSecondary);
+      document.body.style.backgroundColor = bgColor;
+      
+      const fontFamily = config.font_family || defaultConfig.font_family;
+      const fontSize = config.font_size || defaultConfig.font_size;
+      document.body.style.fontFamily = `${fontFamily}, Inter, sans-serif`;
+      document.body.style.fontSize = `${fontSize}px`;
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_color || defaultConfig.background_color,
+            set: (value) => {
+              config.background_color = value;
+              if (window.elementSdk) window.elementSdk.setConfig({ background_color: value });
+            }
+          },
+          {
+            get: () => config.text_secondary || defaultConfig.text_secondary,
+            set: (value) => {
+              config.text_secondary = value;
+              if (window.elementSdk) window.elementSdk.setConfig({ text_secondary: value });
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              if (window.elementSdk) window.elementSdk.setConfig({ text_color: value });
+            }
+          },
+          {
+            get: () => config.accent_color || defaultConfig.accent_color,
+            set: (value) => {
+              config.accent_color = value;
+              if (window.elementSdk) window.elementSdk.setConfig({ accent_color: value });
+            }
+          },
+          {
+            get: () => config.secondary_accent || defaultConfig.secondary_accent,
+            set: (value) => {
+              config.secondary_accent = value;
+              if (window.elementSdk) window.elementSdk.setConfig({ secondary_accent: value });
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: {
+          get: () => config.font_family || defaultConfig.font_family,
+          set: (value) => {
+            config.font_family = value;
+            if (window.elementSdk) window.elementSdk.setConfig({ font_family: value });
+          }
+        },
+        fontSizeable: {
+          get: () => config.font_size || defaultConfig.font_size,
+          set: (value) => {
+            config.font_size = value;
+            if (window.elementSdk) window.elementSdk.setConfig({ font_size: value });
+          }
+        }
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ['hero_headline', config.hero_headline || defaultConfig.hero_headline],
+        ['hero_subtext', config.hero_subtext || defaultConfig.hero_subtext],
+        ['about_title', config.about_title || defaultConfig.about_title],
+        ['about_text_1', config.about_text_1 || defaultConfig.about_text_1],
+        ['about_text_2', config.about_text_2 || defaultConfig.about_text_2],
+        ['about_text_3', config.about_text_3 || defaultConfig.about_text_3],
+        ['experience_title', config.experience_title || defaultConfig.experience_title],
+        ['contact_title', config.contact_title || defaultConfig.contact_title],
+        ['contact_email', config.contact_email || defaultConfig.contact_email],
+        ['contact_phone', config.contact_phone || defaultConfig.contact_phone],
+        ['contact_instagram', config.contact_instagram || defaultConfig.contact_instagram]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+
+    initScrollReveal();
+    initToolsFadeEffect();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bd2b007f343dcf0',t:'MTc2ODI4NDE3Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
