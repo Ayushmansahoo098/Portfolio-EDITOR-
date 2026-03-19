@@ -1,16 +1,73 @@
-# React + Vite
+# 🎬 Ayushman Sahoo | Cinematic 3D Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An immersive, cinematic 3D workspace showcasing the craft of a **Visual Storyteller and Video Editor**. Built using **React Three Fiber**, **Three.js**, and **Framer Motion**, this portfolio provides a unique spatial experience that mirrors the rhythm and flow of cinematic editing.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🌟 Key Features
 
-## React Compiler
+- **🚀 3D Spatial Navigation**: Navigate through a digital workspace in 3D space using a smooth, scroll-driven camera path.
+- **🎥 Cinematic Camera Paths**: Experience high-end motion with lerped camera transitions that guide the user through different segments of the portfolio.
+- **🎞️ Interactive Workspace**:
+  - **Draggable Project Cards**: Move and rearrange "Selected Work" cards freely within the 3D scene.
+  - **Integrated Video Playback**: Watch showreels and edits directly inside 3D project panels using embedded YouTube players.
+- **🌀 Orbital Skills Display**: A dynamic, rotating ring of professional tools (Premiere Pro, After Effects, etc.) that orbits the user.
+- **📱 Responsive & Mobile Friendly**: Fully optimized for all screen sizes, with adaptive 3D layouts and typography for mobile devices.
+- **💎 Premium Glassmorphism UI**: A sleek, modern interface combining transparency, blur effects, and vibrant accent colors (Orange and Purple).
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🛠️ Technology Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Framework**: [React](https://reactjs.org/) + [Vite](https://vitejs.dev/)
+- **3D Engine**: [Three.js](https://threejs.org/) via [@react-three/fiber](https://github.com/pmndrs/react-three-fiber)
+- **3D Utilities**: [@react-three/drei](https://github.com/pmndrs/drei)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) (v18 or higher recommended)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone [repository-url]
+   ```
+2. Navigate to the project directory:
+   ```bash
+   cd "Ayushman website"
+   ```
+3. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+### Development
+
+Run the local development server:
+```bash
+npm run dev
+```
+
+### Production Build
+
+Create an optimized build for deployment:
+```bash
+npm run build
+```
+
+---
+
+## 👤 Author
+
+**Ayushman Sahoo**  
+*Editor & Motion Designer*  
+[ayushmansahoo098@gmail.com](mailto:ayushmansahoo098@gmail.com)
