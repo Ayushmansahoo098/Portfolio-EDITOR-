@@ -1,6 +1,5 @@
 import { ThreeScene } from './components/ThreeScene';
 import { useScrollAnimation } from './hooks/useScrollAnimation';
-import { Loader } from '@react-three/drei';
 
 function App() {
   // Setup global scroll tracking
@@ -26,10 +25,9 @@ function App() {
           <div className="w-[1px] h-12 bg-gradient-to-b from-textSecondary to-transparent animate-pulse"></div>
         </div>
       </div>
-
-      <Loader containerStyles={{ background: 'black' }} dataInterpolation={(p) => `Loading workspace ${p.toFixed(2)}%`} />
     </div>
   );
 }
 
 export default App;
+

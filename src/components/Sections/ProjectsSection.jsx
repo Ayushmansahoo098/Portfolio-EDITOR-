@@ -1,7 +1,61 @@
 import { Html, Float } from '@react-three/drei';
 import { motion, useDragControls } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
+
+/**
+ * Extracts the YouTube video ID from an embed URL.
+ */
+function getYouTubeId(url) {
+  const match = url.match(/embed\/([a-zA-Z0-9_-]+)/);
+  return match ? match[1] : '';
+}
+
+/**
+ * Lightweight YouTube thumbnail with click-to-play.
+ * Avoids loading the heavy iframe (~1-2MB each) until the user actually clicks.
+ */
+function LazyYouTube({ url, title }) {
+  const [playing, setPlaying] = useState(false);
+  const videoId = getYouTubeId(url);
+
+  const handlePlay = useCallback(() => setPlaying(true), []);
+
+  if (playing) {
+    return (
+      <iframe 
+        src={`${url}?autoplay=1`} 
+        title={title}
+        className="w-full h-full border-0 absolute top-0 left-0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowFullScreen
+      />
+    );
+  }
+
+  return (
+    <button
+      onClick={handlePlay}
+      className="w-full h-full absolute top-0 left-0 cursor-pointer group/play bg-black border-0 p-0"
+      aria-label={`Play ${title}`}
+    >
+      <img
+        src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
+        alt={title}
+        className="w-full h-full object-cover"
+        loading="lazy"
+      />
+      {/* Play button overlay */}
+      <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover/play:bg-black/10 transition-colors">
+        <div className="w-14 h-14 rounded-full bg-red-600 flex items-center justify-center shadow-lg group-hover/play:scale-110 transition-transform">
+          <svg viewBox="0 0 24 24" fill="white" className="w-6 h-6 ml-1">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+        </div>
+      </div>
+    </button>
+  );
+}
 
 function ProjectCard({ project, i, isMobile }) {
   const xOffset = isMobile ? (i % 2 === 0 ? -0.5 : 0.5) : (i % 2 === 0 ? -1 : 1) * 3;
@@ -42,15 +96,9 @@ function ProjectCard({ project, i, isMobile }) {
             </div>
           </div>
 
-          {/* Video container */}
+          {/* Video container — lazy loaded */}
           <div className="w-full aspect-video bg-black relative z-10">
-            <iframe 
-              src={project.url} 
-              title={project.title}
-              className="w-full h-full border-0 absolute top-0 left-0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-              allowFullScreen>
-            </iframe>
+            <LazyYouTube url={project.url} title={project.title} />
           </div>
         </motion.div>
       </Html>
