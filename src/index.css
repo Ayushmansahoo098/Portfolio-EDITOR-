@@ -62,6 +62,13 @@ body {
   padding: 0;
 }
 
+/* Hide native cursor on pointer devices so custom cursor shows */
+@media (pointer: fine) {
+  *, *::before, *::after {
+    cursor: none !important;
+  }
+}
+
 #root {
   width: 100%;
 }
