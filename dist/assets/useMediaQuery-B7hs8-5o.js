@@ -1,0 +1,1 @@
+import{f as e,g as t}from"./Float-BpWxLH94.js";var n=t(e(),1);function r(e){let[t,r]=(0,n.useState)(!1);return(0,n.useEffect)(()=>{let n=window.matchMedia(e);n.matches!==t&&r(n.matches);let i=()=>r(n.matches);return window.addEventListener(`resize`,i),()=>window.removeEventListener(`resize`,i)},[t,e]),t}export{r as t};
