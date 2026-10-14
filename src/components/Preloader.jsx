@@ -6,15 +6,14 @@ const STAGES = ['ASSETS', 'TIMELINE', 'RENDER', 'OUTPUT'];
 
 function FilmStrip() {
   return (
-    <div className="flex items-center gap-[6px] px-2 overflow-hidden w-full">
-      {Array.from({ length: 40 }).map((_, i) => (
-        <div
-          key={i}
-          className="flex-shrink-0 w-[18px] h-[14px] rounded-[2px] border"
-          style={{ background: '#f4efe7', borderColor: 'rgba(165,92,67,0.15)' }}
-        />
-      ))}
-    </div>
+    <div
+      className="w-full h-full"
+      style={{
+        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='40'%3E%3Crect x='3' y='13' width='18' height='14' rx='2' ry='2' fill='%23f4efe7' stroke='rgba(165,92,67,0.18)' stroke-width='1'/%3E%3C/svg%3E")`,
+        backgroundRepeat: 'repeat-x',
+        backgroundPosition: 'left center',
+      }}
+    />
   );
 }
 
@@ -147,16 +146,16 @@ export function Preloader({ onComplete }) {
           </div>
 
           {/* LEFT decorative side panel */}
-          <div className="absolute left-4 top-1/2 -translate-y-1/2 flex flex-col gap-1.5 opacity-10 hidden md:flex">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <div key={i} className="w-7 h-5 rounded-sm" style={{ border: '1px solid rgba(165,92,67,0.4)', background: 'rgba(165,92,67,0.05)' }} />
+          <div className="absolute left-4 top-14 bottom-14 flex flex-col gap-2 opacity-15 hidden md:flex overflow-hidden pointer-events-none">
+            {Array.from({ length: 50 }).map((_, i) => (
+              <div key={i} className="w-7 h-5 rounded-sm flex-shrink-0" style={{ border: '1px solid rgba(165,92,67,0.4)', background: 'rgba(165,92,67,0.05)' }} />
             ))}
           </div>
 
           {/* RIGHT decorative side panel */}
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-1.5 opacity-10 hidden md:flex">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <div key={i} className="w-7 h-5 rounded-sm" style={{ border: '1px solid rgba(165,92,67,0.4)', background: 'rgba(165,92,67,0.05)' }} />
+          <div className="absolute right-4 top-14 bottom-14 flex flex-col gap-2 opacity-15 hidden md:flex overflow-hidden pointer-events-none">
+            {Array.from({ length: 50 }).map((_, i) => (
+              <div key={i} className="w-7 h-5 rounded-sm flex-shrink-0" style={{ border: '1px solid rgba(165,92,67,0.4)', background: 'rgba(165,92,67,0.05)' }} />
             ))}
           </div>
 
