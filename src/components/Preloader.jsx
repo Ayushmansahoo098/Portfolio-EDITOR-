@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const DURATION_MS = 2800; // total loading time in ms
+const DURATION_MS = 2600;
 const STAGES = ['ASSETS', 'TIMELINE', 'RENDER', 'OUTPUT'];
 
 function FilmStrip() {
@@ -10,7 +10,8 @@ function FilmStrip() {
       {Array.from({ length: 40 }).map((_, i) => (
         <div
           key={i}
-          className="flex-shrink-0 w-[18px] h-[14px] rounded-[2px] bg-[#030303] border border-white/[0.08]"
+          className="flex-shrink-0 w-[18px] h-[14px] rounded-[2px] border"
+          style={{ background: '#f4efe7', borderColor: 'rgba(165,92,67,0.15)' }}
         />
       ))}
     </div>
@@ -24,38 +25,43 @@ function TimelineRuler({ progress }) {
       <div className="flex justify-between px-1">
         {Array.from({ length: 11 }).map((_, i) => (
           <div key={i} className="flex flex-col items-center gap-[2px]">
-            <span className="text-[7px] text-white/20 font-mono">{i * 10}</span>
-            <div className={`w-px ${i % 5 === 0 ? 'h-2.5 bg-white/25' : 'h-1.5 bg-white/10'}`} />
+            <span className="text-[7px] font-mono" style={{ color: 'rgba(165,92,67,0.35)' }}>{i * 10}</span>
+            <div
+              className={`w-px ${i % 5 === 0 ? 'h-2.5' : 'h-1.5'}`}
+              style={{ background: i % 5 === 0 ? 'rgba(165,92,67,0.4)' : 'rgba(165,92,67,0.15)' }}
+            />
           </div>
         ))}
       </div>
 
       {/* Main progress track */}
-      <div className="relative h-[3px] bg-white/[0.07] rounded-full overflow-visible">
-        {/* Filled portion */}
+      <div className="relative h-[3px] rounded-full overflow-visible" style={{ background: 'rgba(165,92,67,0.12)' }}>
         <motion.div
           className="absolute top-0 left-0 h-full rounded-full"
           style={{
             width: `${progress}%`,
-            background: 'linear-gradient(90deg, #FF8C00, #a855f7, #7B3FE4)',
-            boxShadow: '0 0 12px rgba(255,140,0,0.5)',
+            background: 'linear-gradient(90deg, #a55c43, #34463d)',
+            boxShadow: '0 0 12px rgba(165,92,67,0.4)',
           }}
         />
-        {/* Playhead dot */}
         <motion.div
-          className="absolute top-1/2 -translate-y-1/2 w-[10px] h-[10px] rounded-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.9)]"
-          style={{ left: `calc(${progress}% - 5px)` }}
+          className="absolute top-1/2 -translate-y-1/2 w-[10px] h-[10px] rounded-full shadow-lg"
+          style={{
+            left: `calc(${progress}% - 5px)`,
+            background: '#a55c43',
+            boxShadow: '0 0 10px rgba(165,92,67,0.8)',
+          }}
         />
       </div>
 
       {/* Bottom labels */}
       <div className="flex justify-between items-center px-px">
-        <span className="text-[9px] text-white/30 uppercase tracking-[0.2em] font-mono">
-          {progress < 100 ? 'Initializing Edit Suite...' : '▶ Ready to play'}
+        <span className="text-[9px] uppercase tracking-[0.2em] font-mono" style={{ color: 'rgba(165,92,67,0.5)' }}>
+          {progress < 100 ? 'Loading edit suite...' : '▶ Ready'}
         </span>
         <span
           className="text-[10px] font-mono font-bold"
-          style={{ color: progress < 100 ? '#FF8C00' : '#4ade80' }}
+          style={{ color: progress < 100 ? '#a55c43' : '#34463d' }}
         >
           {Math.floor(progress)}%
         </span>
@@ -79,7 +85,6 @@ export function Preloader({ onComplete }) {
       const p = Math.min((elapsed / DURATION_MS) * 100, 100);
       setProgress(p);
 
-      // Timecode based on progress
       const totalFrames = Math.floor(p * 0.72);
       const secs = Math.floor(totalFrames / 24);
       const mins = Math.floor(secs / 60);
@@ -91,7 +96,6 @@ export function Preloader({ onComplete }) {
       if (p < 100) {
         requestAnimationFrame(tick);
       } else {
-        // Give a brief pause at 100% before exiting
         setTimeout(() => {
           setDone(true);
           setTimeout(handleComplete, 700);
@@ -109,50 +113,50 @@ export function Preloader({ onComplete }) {
         <motion.div
           key="preloader"
           className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden select-none"
-          style={{ background: '#040404' }}
-          exit={{ opacity: 0, scale: 1.04 }}
+          style={{ background: '#f4efe7' }}
+          exit={{ opacity: 0, scale: 1.02 }}
           transition={{ duration: 0.65, ease: [0.43, 0.13, 0.23, 0.96] }}
         >
-          {/* Subtle scanline overlay */}
+          {/* Subtle texture */}
           <div
-            className="absolute inset-0 pointer-events-none"
+            className="absolute inset-0 pointer-events-none opacity-[0.04]"
             style={{
               backgroundImage:
-                'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.012) 3px, rgba(255,255,255,0.012) 4px)',
+                "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E\")",
             }}
           />
 
-          {/* Ambient glow orb behind name */}
+          {/* Warm ambient glow */}
           <div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full pointer-events-none"
             style={{
               background:
-                'radial-gradient(ellipse at center, rgba(255,140,0,0.12) 0%, rgba(123,63,228,0.08) 50%, transparent 75%)',
+                'radial-gradient(ellipse at center, rgba(165,92,67,0.08) 0%, rgba(52,70,61,0.06) 50%, transparent 75%)',
               filter: 'blur(40px)',
             }}
           />
 
           {/* TOP film strip */}
-          <div className="absolute top-0 left-0 right-0 h-10 bg-[#080808] border-b border-white/[0.06] flex items-center">
+          <div className="absolute top-0 left-0 right-0 h-10 border-b flex items-center" style={{ background: '#e8dfd2', borderColor: 'rgba(165,92,67,0.12)' }}>
             <FilmStrip />
           </div>
 
           {/* BOTTOM film strip */}
-          <div className="absolute bottom-0 left-0 right-0 h-10 bg-[#080808] border-t border-white/[0.06] flex items-center">
+          <div className="absolute bottom-0 left-0 right-0 h-10 border-t flex items-center" style={{ background: '#e8dfd2', borderColor: 'rgba(165,92,67,0.12)' }}>
             <FilmStrip />
           </div>
 
           {/* LEFT decorative side panel */}
           <div className="absolute left-4 top-1/2 -translate-y-1/2 flex flex-col gap-1.5 opacity-10 hidden md:flex">
             {Array.from({ length: 10 }).map((_, i) => (
-              <div key={i} className="w-7 h-5 border border-white/40 rounded-sm bg-white/5" />
+              <div key={i} className="w-7 h-5 rounded-sm" style={{ border: '1px solid rgba(165,92,67,0.4)', background: 'rgba(165,92,67,0.05)' }} />
             ))}
           </div>
 
           {/* RIGHT decorative side panel */}
           <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-1.5 opacity-10 hidden md:flex">
             {Array.from({ length: 10 }).map((_, i) => (
-              <div key={i} className="w-7 h-5 border border-white/40 rounded-sm bg-white/5" />
+              <div key={i} className="w-7 h-5 rounded-sm" style={{ border: '1px solid rgba(165,92,67,0.4)', background: 'rgba(165,92,67,0.05)' }} />
             ))}
           </div>
 
@@ -166,45 +170,39 @@ export function Preloader({ onComplete }) {
               transition={{ delay: 0.1 }}
               className="flex items-center gap-3"
             >
-              {/* Record indicator */}
               <motion.div
-                className="w-2 h-2 rounded-full bg-red-500"
+                className="w-2 h-2 rounded-full"
+                style={{ background: '#a55c43' }}
                 animate={{ opacity: [1, 0.2, 1] }}
                 transition={{ duration: 1, repeat: Infinity }}
               />
-              <span className="font-mono text-[11px] md:text-xs text-[#FF8C00]/70 tracking-[0.35em]">
+              <span className="font-mono text-[11px] md:text-xs tracking-[0.35em]" style={{ color: 'rgba(165,92,67,0.7)' }}>
                 TC: {timecode}
               </span>
             </motion.div>
 
             {/* Main name */}
             <motion.div
-              className="text-center"
-              initial={{ opacity: 0, y: 20, letterSpacing: '0.4em' }}
-              animate={{ opacity: 1, y: 0, letterSpacing: '0.15em' }}
+              className="text-center px-2"
+              initial={{ opacity: 0, y: 20, letterSpacing: '0.3em' }}
+              animate={{ opacity: 1, y: 0, letterSpacing: '0.12em' }}
               transition={{ delay: 0.2, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
             >
               <h1
-                className="font-display text-[clamp(3.5rem,10vw,7rem)] leading-none text-white tracking-widest"
+                className="font-serif leading-none tracking-normal sm:tracking-wider"
+                style={{ fontSize: 'clamp(2.25rem, 8.5vw, 6.5rem)', color: '#24231f' }}
               >
                 AYUSHMAN
-                <span
-                  style={{
-                    background: 'linear-gradient(135deg, #FF8C00, #7B3FE4)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                  }}
-                >
-                  .
-                </span>
+                <span style={{ color: '#a55c43' }}>.</span>
               </h1>
               <motion.p
-                className="text-[#9CA3AF] tracking-[0.45em] uppercase text-[10px] md:text-xs mt-2"
+                className="tracking-[0.25em] sm:tracking-[0.45em] uppercase text-[9px] sm:text-[10px] md:text-xs mt-2"
+                style={{ color: '#71695f' }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
               >
-                Cinematic Editor &amp; Visual Storyteller
+                Editor &amp; Visual Storyteller
               </motion.p>
             </motion.div>
 
@@ -220,7 +218,7 @@ export function Preloader({ onComplete }) {
 
             {/* Stage indicators */}
             <motion.div
-              className="flex gap-4 md:gap-6"
+              className="flex flex-wrap justify-center gap-2.5 sm:gap-4 md:gap-6 px-1"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
@@ -234,14 +232,14 @@ export function Preloader({ onComplete }) {
                       className="w-1.5 h-1.5 rounded-full"
                       animate={{
                         backgroundColor: isActive
-                          ? '#FF8C00'
+                          ? '#a55c43'
                           : isCurrent
-                          ? '#7B3FE4'
-                          : 'rgba(255,255,255,0.12)',
+                          ? '#34463d'
+                          : 'rgba(165,92,67,0.15)',
                         boxShadow: isActive
-                          ? '0 0 6px rgba(255,140,0,0.7)'
+                          ? '0 0 6px rgba(165,92,67,0.7)'
                           : isCurrent
-                          ? '0 0 6px rgba(123,63,228,0.7)'
+                          ? '0 0 6px rgba(52,70,61,0.5)'
                           : 'none',
                       }}
                       transition={{ duration: 0.3 }}
@@ -250,10 +248,10 @@ export function Preloader({ onComplete }) {
                       className="text-[8px] md:text-[9px] uppercase tracking-wider font-mono transition-colors duration-300"
                       style={{
                         color: isActive
-                          ? '#FF8C00'
+                          ? '#a55c43'
                           : isCurrent
-                          ? '#a78bfa'
-                          : 'rgba(255,255,255,0.2)',
+                          ? '#34463d'
+                          : 'rgba(165,92,67,0.2)',
                       }}
                     >
                       {label}
@@ -266,8 +264,8 @@ export function Preloader({ onComplete }) {
           </div>
 
           {/* Bottom-right credit */}
-          <div className="absolute bottom-14 right-6 text-[8px] text-white/15 font-mono tracking-widest uppercase">
-            Edit Suite v1.0
+          <div className="absolute bottom-14 right-6 text-[8px] font-mono tracking-widest uppercase" style={{ color: 'rgba(165,92,67,0.2)' }}>
+            Edit Suite v2.0
           </div>
         </motion.div>
       )}

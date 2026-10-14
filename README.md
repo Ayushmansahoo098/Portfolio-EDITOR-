@@ -70,4 +70,4 @@ npm run build
 
 **Ayushman Sahoo**  
 *Editor & Motion Designer*  
-[ayushmansahoo098@gmail.com](mailto:ayushmansahoo098@gmail.com)
+[ayushmansahoo614@gmail.com](mailto:ayushmansahoo614@gmail.com)
